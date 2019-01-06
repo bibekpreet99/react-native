@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     },
     result:{
         flex: 2,
-        backgroundColor: 'slategrey',
+        backgroundColor: 'darkgrey',
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     calculationText:{
-      fontSize: 30,
+      fontSize: 36,
       color: 'white',
     },
     resultText:{
