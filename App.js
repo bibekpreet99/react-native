@@ -1,32 +1,101 @@
 import React,{ Component } from "React";
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native'
 
 
 export default class calculator extends Component{
+  constructor(){
+    super()
+    this.state = {
+      resultText: '',
+      calculateText: ''
+    }
+    this.operations = ['<=','+','-','*','/','CE']
+  }
+
+  calculateResult(){
+    let text = this.state.resultText
+    const lastChar = text.split('').pop()
+    if(lastChar != '+' && lastChar != '/' && lastChar != '*' && lastChar != '-')
+    this.setState({
+      calculateText: eval(text)
+    })
+    else{
+      Alert.alert("Format is wrong")
+    }
+  }
+
+  operate(operation){
+    switch (operation) {
+      case "<=":
+        let text = this.state.resultText.split('')
+        text.pop()
+        this.setState({
+          resultText: text.join('')
+        })
+        break;
+      case 'CE':
+        this.setState({
+          resultText: '',
+          calculateText:''
+        })
+        break
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+        const lastChar = this.state.resultText.split('').pop()
+        if(this.operations.indexOf(lastChar)>0) return
+
+        if(this.state.resultText == "")return
+        this.setState({
+          resultText: this.state.resultText + operation
+        })
+
+      
+    }
+  }
+
+
+  buttonPressed(text){
+    if(text == '='){
+      this.calculateResult()
+      
+    }
+    else{
+    this.setState({
+      resultText: this.state.resultText + text
+    })
+  }
+  }
+
+
+
     render(){
       let btn = [[7,8,9],[4,5,6],[1,2,3],['.',0,'=']]
       let rows = []
       for(let i=0 ; i<4; i++){
         let row = []
         for(let j=0; j<3; j++)
-        row.push(<TouchableOpacity style= {styles.btn}><Text style={styles.btnText}>{btn[i][j]}</Text></TouchableOpacity>)
-        rows.push(<View style={styles.row}>{row}</View>)
-        console.log(rows)
+        row.push(<TouchableOpacity key={btn[i][j]} style= {styles.btn} onPress = {()=>{ this.buttonPressed(btn[i][j])}}>
+        <Text style={styles.btnText}>{btn[i][j]}</Text></TouchableOpacity>)
+        rows.push(<View key={i} style={styles.row}>{row}</View>)
       }
 
-      let operations = ['CE','+','-','*','/']
+      
       let ops = []
-      for(let i=0; i<5; i++){
-        ops.push(<TouchableOpacity style={styles.btn}><Text style={[styles.btnText, styles.white]}>{operations[i]}</Text></TouchableOpacity>)
+      for(let i=0; i<6; i++){
+        ops.push(<TouchableOpacity key= {this.operations[i]}style={styles.btn} onPress={()=>this.operate(this.operations[i])}>
+        <Text style={[styles.btnText, styles.white]}>{this.operations[i]}</Text>
+        </TouchableOpacity>)
       }
       
         return(
             <View style= {styles.container}>
                 <View style = {styles.result}>
-                  <Text style={styles.resultText}>11*11</Text>
+                  <Text style={styles.resultText}>{this.state.resultText}</Text>
                 </View>
                 <View style = {styles.calculation}>
-                  <Text style={styles.calculationText}>121</Text>
+                  <Text style={styles.calculationText}>{this.state.calculateText}</Text>
                 </View>
                 <View style = {styles.buttons}>
                     <View style={styles.numbers}>
